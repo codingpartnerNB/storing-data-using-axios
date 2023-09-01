@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filling the form : crudcrud.com</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .myForm {
+            background-color: gray;
+            height: 50vh;
+            width: 30vw;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            border-radius: 5px;
+            height: 28px;
+            width: 28vw;
+            box-sizing: border-box;
+        }
+
+        label {
+            line-height: 3;
+        }
+
+        .btn {
+            cursor: pointer;
+            background-color: black;
+            font-weight: 900;
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .marginLeft {
+            margin-left: 20px;
+        }
+
+        input[type="submit"] {
+            margin: 14px 0px;
+            width: 28vw;
+        }
+
+        .btn:hover {
+            background-color: rgb(75, 43, 109);
+        }
+
+        .error {
+            background-color: red;
+            color: white;
+            padding: 5px;
+            width: 28vw;
+            box-sizing: border-box;
+        }
+
+        #userDetail {
+            list-style-type: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h1>Fill the Form</h1>
+        <form class="myForm">
+            <h3>Add User</h3>
+            <!-- <div class="msg"></div> -->
+            <label for="name">Name:</label><br />
+            <input type="text" id="name" /><br />
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" /><br />
+            <label for="phoneno">Phone no:</label><br />
+            <input type="text" id="phoneno" maxlength="10" /><br />
+            <input type="submit" value="Submit" class="btn" /><br />
+        </form>
+        <ul id="userDetail"></ul>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>
