@@ -12,21 +12,21 @@ userDetail.addEventListener('click', deleteData);
 
 userDetail.addEventListener('click', editData);
 
-window.addEventListener('DOMContentLoaded',showAllOnBrowser);
+window.addEventListener('DOMContentLoaded', showAllOnBrowser);
 
 
-function showAllOnBrowser(event){
+function showAllOnBrowser(event) {
     event.preventDefault();
     axios.get('https://crudcrud.com/api/77f9990c6d6640b898f268822f2e5396/userData')
-    .then((res)=>{
-        console.log(res);
-        for(let i=0;i<res.data.length;i++){
-            showOnBrowser(res.data[i].Name,res.data[i].Email,res.data[i].Phone);
-        }
-    })
-    .catch((err)=>{
-        console.log(err);
-    })
+        .then((res) => {
+            console.log(res);
+            for (let i = 0; i < res.data.length; i++) {
+                showOnBrowser(res.data[i]);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 
@@ -41,7 +41,7 @@ function onSubmit(event) {
         msg.className = "error";
         msg.appendChild(document.createTextNode("Please enter all fields"));
         let label = document.querySelector('label[for="name"]');
-        myForm.insertBefore(msg,label);
+        myForm.insertBefore(msg, label);
         setTimeout(() => msg.remove(), 2000);
     }
     else {
@@ -53,15 +53,15 @@ function onSubmit(event) {
         };
 
         // Storing data using axios POST request
-        axios.post('https://crudcrud.com/api/77f9990c6d6640b898f268822f2e5396/userData',userData)
-        .then((res)=>{
-            showOnBrowser(userData.Name,userData.Email,userData.Phone);
-            console.log(res);
-        })
-        .catch((err)=>{
-            document.body.innerHTML=document.body.innerHTML+"<h4 class='error'>Something went wrong</h4>";
-            console.log(err);
-        });
+        axios.post('https://crudcrud.com/api/77f9990c6d6640b898f268822f2e5396/userData', userData)
+            .then((res) => {
+                showOnBrowser(userData);
+                console.log(res);
+            })
+            .catch((err) => {
+                document.body.innerHTML = document.body.innerHTML + "<h4 class='error'>Something went wrong</h4>";
+                console.log(err);
+            });
 
         //Storing object in localStorage with multiple users
         // localStorage.setItem(emailInput.value, JSON.stringify(userData));
@@ -73,41 +73,47 @@ function onSubmit(event) {
     }
 }
 
-function showOnBrowser(name,email,phone){
+function showOnBrowser(user) {
     const li = document.createElement('li');
-        const deleteBtn = document.createElement('input');
-        deleteBtn.setAttribute('type', 'button');
-        deleteBtn.className = 'btn marginLeft delete';
-        deleteBtn.setAttribute('value', 'Delete');
-        const editBtn = document.createElement('input');
-        editBtn.setAttribute('type','button');
-        editBtn.className = "btn marginLeft edit";
-        editBtn.setAttribute('value','Edit');   
-        li.appendChild(document.createTextNode(`${name}:${email}:${phone}`));
-        li.appendChild(deleteBtn);
-        li.appendChild(editBtn);
-        userDetail.appendChild(li);
+    const deleteBtn = document.createElement('input');
+    deleteBtn.setAttribute('type', 'button');
+    deleteBtn.className = 'btn marginLeft delete';
+    deleteBtn.setAttribute('value', 'Delete');
+    const editBtn = document.createElement('input');
+    editBtn.setAttribute('type', 'button');
+    editBtn.className = "btn marginLeft edit";
+    editBtn.setAttribute('value', 'Edit');
+    li.appendChild(document.createTextNode(`${user.Name}:${user.Email}:${user.Phone}`));
+    li.appendChild(deleteBtn);
+    li.appendChild(editBtn);
+    userDetail.appendChild(li);
 }
 
 function deleteData(event) {
     event.preventDefault();
     if (event.target.classList.contains('delete')) {
-        // Method 1
+
         let li = event.target.parentElement.textContent.split(":");
-        localStorage.removeItem(li[1]);
-        // Method 2
-        // let keys = Object.keys(localStorage);
-        // let li = event.target.parentElement.textContent.split(":");
-        // if (keys.includes(li[1])) {
-        //     localStorage.removeItem(li[1]);
-        // }
-        let listIt = event.target.parentElement;
-        userDetail.removeChild(listIt);
+        axios.get("https://crudcrud.com/api/77f9990c6d6640b898f268822f2e5396/userData")
+            .then((res) => {
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].Email === li[1]) {
+                        let url = "https://crudcrud.com/api/77f9990c6d6640b898f268822f2e5396/userData/"+res.data[i]._id;
+                        axios.delete(url)
+                            .then((res) => {
+                                console.log(res);
+                            })
+                            .catch((error) => console.log(error));
+                        let listIt = event.target.parentElement;
+                        userDetail.removeChild(listIt);
+                    }
+                }
+            })
     }
 }
 
-function editData(event){
-    if(event.target.classList.contains('edit')){
+function editData(event) {
+    if (event.target.classList.contains('edit')) {
         let li = event.target.parentElement.textContent.split(":");
         nameInput.value = li[0];
         emailInput.value = li[1];
